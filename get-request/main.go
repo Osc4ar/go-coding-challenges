@@ -8,11 +8,16 @@ import (
 func contentType(url string) (string, error) {
 	resp, err := http.Get(url)
 	if err != nil {
-		return "", fmt.Errorf("Cannot get content type of %s", url)
+		return "", err
 	}
 	defer resp.Body.Close()
 
-	return resp.Header.Get("Content-Type"), nil
+	cType := resp.Header.Get("Content-Type")
+	if cType == "" {
+		return cType, fmt.Errorf("Cannot get Content-Type header")
+	}
+
+	return cType, nil
 }
 
 func main() {
